@@ -80,6 +80,9 @@ const getChannelVideos = asyncHandler(async (req, res) => {
         Title: 1,
         Description: 1,
         Duration: 1,
+        Views: 1,
+        isPublished: 1,
+        createdAt: 1,
       },
     },
   ]);

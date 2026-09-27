@@ -37,6 +37,28 @@ const getAllVideos = asyncHandler(async (req, res) => {
   const videoAggregate = Video.aggregate([
     { $match: matchStage },
     { $sort: sortStage },
+    {
+      $lookup: {
+        from: "users",
+        localField: "Owner",
+        foreignField: "_id",
+        as: "ownerInfo",
+        pipeline: [
+          {
+            $project: {
+              username: 1,
+              fullname: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        ownerInfo: { $first: "$ownerInfo" },
+      },
+    },
   ]);
 
   const result = await Video.aggregatePaginate(videoAggregate, { page, limit });
@@ -125,7 +147,7 @@ const getVideoById = asyncHandler(async (req, res) => {
     videoId,
     { $inc: { Views: 1 } },
     { new: true }
-  );
+  ).populate("Owner", "username fullname avatar");
 
   if (!video) {
     throw new ApiError(404, "No Video found");

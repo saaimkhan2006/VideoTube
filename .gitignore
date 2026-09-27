@@ -1,4 +1,13 @@
 node_modules/
 .env
-src/.env
-src/env.sample
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/public/temp/*
+!backend/public/temp/.gitkeep
+
+# Frontend
+frontend/node_modules/
+frontend/.env
+frontend/dist/
